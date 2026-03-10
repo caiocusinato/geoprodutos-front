@@ -1,4 +1,4 @@
-function Header() {
+function Header({ cartCount }) {
   return (
     <header style={styles.header}>
       <div>
@@ -10,7 +10,7 @@ function Header() {
         <ul style={styles.navList}>
           <li>Início</li>
           <li>Catálogo</li>
-          <li>Carrinho (0)</li>
+          <li>Carrinho ({ cartCount })</li>
         </ul>
       </nav>
     </header>

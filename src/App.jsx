@@ -1,18 +1,30 @@
+// Adicionamos o useEffect na importação
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import ProductCard from './components/ProductCard';
 
 function App() {
-  // Uma lista simulada (Mock) simulando o que virá do seu banco de dados no futuro
-  const produtos = [
-    { id: 1, nome: 'Camiseta Geoparque', preco: 59.90, imagem: '👕' },
-    { id: 2, nome: 'Miniatura T-Rex (Impressão 3D)', preco: 35.00, imagem: '🦖' },
-    { id: 3, nome: 'Caneca Fósseis', preco: 42.50, imagem: '☕' },
-    { id: 4, nome: 'Artesanato Local Uberaba', preco: 85.00, imagem: '🏺' }
-  ];
+  const [cartCount, setCartCount] = useState(0);
+  // Nova variável de estado para guardar os produtos que virão da API
+  const [produtos, setProdutos] = useState([]);
+
+  // O useEffect vai na API buscar os dados assim que o site carregar
+  useEffect(() => {
+    fetch('http://localhost:3000/api/produtos')
+      .then((resposta) => resposta.json())
+      .then((dados) => {
+        setProdutos(dados); // Salva os dados recebidos do backend no estado do React
+      })
+      .catch((erro) => console.error('Erro ao buscar produtos:', erro));
+  }, []); // Essa lista vazia [] significa "rode apenas uma vez quando abrir a página"
+
+  const handleAddToCart = () => {
+    setCartCount((current) => current + 1);
+  };
 
   return (
     <div style={{ backgroundColor: '#f9f9f9', minHeight: '100vh' }}>
-      <Header />
+      <Header cartCount={cartCount} />
       
       <main style={{ padding: '3rem', fontFamily: 'sans-serif', maxWidth: '1200px', margin: '0 auto' }}>
         <h2>Nossa Loja</h2>
@@ -20,17 +32,22 @@ function App() {
           Leve um pedaço da história de Uberaba com você.
         </p>
 
-        {/* Grade onde os produtos vão aparecer */}
-        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-          {produtos.map((produto) => (
-            <ProductCard 
-              key={produto.id} 
-              nome={produto.nome} 
-              preco={produto.preco} 
-              imagem={produto.imagem} 
-            />
-          ))}
-        </div>
+        {/* Verificamos se já chegaram produtos da API. Se não, mostramos "Carregando..." */}
+        {produtos.length === 0 ? (
+          <p>Carregando produtos do servidor...</p>
+        ) : (
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            {produtos.map((produto) => (
+              <ProductCard 
+                key={produto.id} 
+                nome={produto.nome} 
+                preco={produto.preco} 
+                imagem={produto.imagem} 
+                onAdd={handleAddToCart} 
+              />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

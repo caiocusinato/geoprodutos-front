@@ -1,11 +1,14 @@
-function ProductCard({ nome, preco, imagem }) {
+// Adicionamos a propriedade onAdd aqui
+function ProductCard({ nome, preco, imagem, onAdd }) {
   return (
     <div style={styles.card}>
       <div style={styles.imagePlaceholder}>{imagem}</div>
       <h3 style={styles.title}>{nome}</h3>
-      {/* O toFixed(2) garante que o preço sempre tenha duas casas decimais */}
       <p style={styles.price}>R$ {preco.toFixed(2)}</p>
-      <button style={styles.button}>Adicionar ao Carrinho</button>
+      {/* Colocamos o evento onClick no botão */}
+      <button onClick={onAdd} style={styles.button}>
+        Adicionar ao Carrinho
+      </button>
     </div>
   );
 }
@@ -28,7 +31,7 @@ const styles = {
     fontSize: '1.1rem',
     color: '#333',
     marginBottom: '0.5rem',
-    minHeight: '40px' // Mantém os cards alinhados mesmo com nomes grandes
+    minHeight: '40px'
   },
   price: {
     fontSize: '1.2rem',
