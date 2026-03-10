@@ -41,7 +41,7 @@ function App() {
               <ProductCard 
                 key={produto.id} 
                 nome={produto.nome} 
-                preco={produto.preco} 
+                preco={Number(produto.preco)} 
                 imagem={produto.imagem} 
                 onAdd={handleAddToCart} 
               />
